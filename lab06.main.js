@@ -83,7 +83,7 @@ class ServiceNowAdapter extends EventEmitter {
     this.healthcheck();
   }
 
- /**
+/**
  * @memberof ServiceNowAdapter
  * @method healthcheck
  * @summary Check ServiceNow Health
@@ -114,7 +114,7 @@ healthcheck(callback) {
       * healthcheck(), execute it passing the error seen as an argument
       * for the callback's errorMessage parameter.
       */
-      this.emitOffline();
+       this.emitOffline();
       if(callback){
         callback(result,error);
       }
@@ -129,7 +129,7 @@ healthcheck(callback) {
       * parameter as an argument for the callback function's
       * responseData parameter.
       */
-       this.emitOnline();
+      this.emitOnline();
       if(callback){
         callback(result,error);
       }
@@ -190,32 +190,7 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * get() takes a callback function.
      */
-    this.connector.get((data, error) => {
-        let changeTickets = [];
-        if(error){
-            callback(data,error);
-        }
-        else {
-            if(data.body){
-                let bodyObj = JSON.parse(data.body);
-                
-                    bodyObj.result.forEach((item) => {
-                        let changeTicket = {
-                            change_ticket_number: item.number,
-                            active: item.active,
-                            priority: item.priority,
-                            description: item.description,
-                            work_start: item.work_start,
-                            work_end: item.work_end,
-                            change_ticket_key: item.sys_id,
-                        };
-                        changeTickets.push(changeTicket);
-                    });
-            }
-            callback(changeTickets,error);
-        }
-
-   });
+     this.connector.get(callback);
   }
 
   /**
@@ -234,29 +209,7 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * post() takes a callback function.
      */
-     this.connector.post((data, error) => {
-
-         if(error){
-            callback(data,error);
-         }
-         else {
-            if(data.body){
-                let bodyObj = JSON.parse(data.body);
-                let ticket = bodyObj.result
-                    let changeTicket = {
-                        change_ticket_number: ticket.number,
-                        active: ticket.active,
-                        priority: ticket.priority,
-                        description: ticket.description,
-                        work_start: ticket.work_start,
-                        work_end: ticket.work_end,
-                        change_ticket_key: ticket.sys_id,
-                    };
-                callback(changeTicket,error);
-            }
-        }
-
-     });
+      this.connector.post(callback);
   }
 }
 
